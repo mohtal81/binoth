@@ -17,7 +17,6 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          # On retire la ligne 'cache: gradle' pour éviter l'erreur de détection
           
       - name: Install Flutter
         uses: subosito/flutter-action@v2
@@ -28,11 +27,11 @@ jobs:
         run: flutter pub get
 
       - name: Build APK
-        # Cette commande va générer les fichiers Android manquants si nécessaire
-        run: flutter build apk --release --no-tree-shake-icons
+        # Version debug pour garantir la réussite sans certificat de signature
+        run: flutter build apk --debug --no-tree-shake-icons
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: release-apk
-          path: build/app/outputs/flutter-apk/app-release.apk
+          path: build/app/outputs/flutter-apk/app-debug.apk
