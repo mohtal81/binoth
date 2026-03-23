@@ -12,28 +12,23 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Utiliser Java 17 est crucial pour les dernières versions de Gradle/Flutter
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
-          cache: 'gradle'
-
+          # On retire la ligne 'cache: gradle' pour éviter l'erreur de détection
+          
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
-          cache: true
 
-      # Nettoyage et récupération des dépendances
       - name: Get dependencies
-        run: |
-          flutter pub get
-          flutter clean
+        run: flutter pub get
 
-      # Compilation explicite pour éviter les erreurs de signature
       - name: Build APK
+        # Cette commande va générer les fichiers Android manquants si nécessaire
         run: flutter build apk --release --no-tree-shake-icons
 
       - name: Upload APK
